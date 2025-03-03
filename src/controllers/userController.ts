@@ -8,6 +8,7 @@ interface CustomContext extends Context {
   params: { id?: string };
   query: { id?: string; page?: string };
   set: any;
+  jwt: any;
 }
 export const createUsers = async ({ body, set }: CustomContext) => {
   try {
@@ -32,9 +33,25 @@ export const createUsers = async ({ body, set }: CustomContext) => {
     return ResponseHandler.sendError(set, error, Codes.INTERNAL_SERVER_ERROR, Messages.INTERNAL_SERVER_ERROR);
   }
 };
+export const getJWT_Token = async ({ body, jwt, set }: CustomContext) => {
+      const { username, password } = body;
+
+      // Example user validation (replace with DB validation)
+      if (username !== "admin" || password !== "password") {
+        return ResponseHandler.sendError(set, 400, Codes.INTERNAL_SERVER_ERROR, Messages.INTERNAL_SERVER_ERROR);
+
+      } 
+      // Generate JWT Token
+      const token = await jwt.sign({ username });
+
+      return {
+        message: "Login successful",
+        token,
+      };
+    }
 
 
-export const getUsers = async ({ query, set }: CustomContext) => {
+export const getUsers = async ({ query, set}: CustomContext) => {
   try {
     if (query.id) {
       const result = await userModel.findById(query.id);
