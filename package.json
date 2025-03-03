@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/app.ts",
-    "start": "nodemon dist/app.js"
+    "dev": "node init && bun run --watch src/app.ts",
+    "start": "node init && nodemon dist/app.js"
   },
   "dependencies": {
     "@elysiajs/cookie": "^0.8.0",

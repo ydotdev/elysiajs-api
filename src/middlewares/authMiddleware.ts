@@ -50,11 +50,19 @@ export const authMiddleware = async ({ jwt, headers, set, store }: any) => {
       );
     }
 
+    if (profile.username !== "admin") {
+      return ResponseHandler.sendError(
+        set,
+        "Forbidden",
+        Codes.FORBIDDEN,
+        "Access denied: Only admin can access this"
+      );
+    }
         // Store the authenticated user's profile for use in subsequent handlers/controllers
 
     store.profile = profile;
     console.log("Middleware done => proceeding to controller");
-
+    return
   } catch (error: any) {
         // Default status code and message for authentication failure
 
