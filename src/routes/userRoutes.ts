@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
-import { createUsers, deleteUsers, getUsers, updateUsers } from "../controllers/userController"; // Import user controller functions
+import { createUsers, deleteUsers, getUsers, updateUsers, getJWT_Token } from "../controllers/userController"; // Import user controller functions
 import { config } from "dotenv";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 config(); // Load environment variables
 
@@ -18,6 +19,9 @@ export const userRoutes = (app: Elysia): Elysia => {
      * @route POST /create
      * @handler createUsers - Handles the creation of a user.
      */
+    
+    .post('/token', getJWT_Token)
+
     .post("/create", createUsers)
 
     /**
@@ -26,7 +30,7 @@ export const userRoutes = (app: Elysia): Elysia => {
      * @route GET /
      * @handler getUsers - Handles the retrieval of users.
      */
-    .get("/get", getUsers)
+    .get("/get",getUsers, {beforeHandle: authMiddleware})
 
     /**
      * Route for updating a user.
@@ -45,4 +49,5 @@ export const userRoutes = (app: Elysia): Elysia => {
      * @param id - The ID of the user to delete (as a path parameter).
      */
     .delete("/delete/", deleteUsers);
+
 };
